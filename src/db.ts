@@ -24,7 +24,7 @@ export class InMemoryDB {
    * The interval ID for the garbage collector.
    * This interval is used to periodically check for expired keys and remove them.
    */
-  private garbageCollectorInterval: NodeJS.Timeout;
+  private garbageCollectorIntervalId: NodeJS.Timeout;
 
   /**
    * Creates a new instance of the in-memory database.
@@ -32,7 +32,7 @@ export class InMemoryDB {
   constructor() {
     this.store = new Map();
     this.ttlStore = new MinHeap();
-    this.garbageCollectorInterval = setInterval(this.collectExpiredKeys.bind(this), 1000);
+    this.garbageCollectorIntervalId = setInterval(this.collectExpiredKeys.bind(this), 1000);
   }
 
   /**
@@ -139,7 +139,7 @@ export class InMemoryDB {
   public flushAll(): void {
     this.store.clear();
     this.ttlStore.clear();
-    clearInterval(this.garbageCollectorInterval);
+    clearInterval(this.garbageCollectorIntervalId);
   }
 
   /**
